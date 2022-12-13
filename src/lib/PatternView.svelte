@@ -13,14 +13,11 @@
     /**
      * @type {Song}
      */
-    export let song = null;
+    export let song;
 
-    let records = [];
-    if (song) {
-        let pattern = song.patterns[pattern_id];
-        let channel_id = 0;
-        records = pattern.channels[channel_id].records;
-    }
+    $: pattern = song.patterns[pattern_id];
+    let channel_id = 0;
+    $: records = pattern.channels[channel_id].records;
 
     function to_hex(d) {
         return ("0" + Number(d).toString(16)).slice(-2).toUpperCase();
@@ -29,7 +26,7 @@
 
 <div class="pattern">
     <div class="pattern-cell">
-        <span class="mark">&nbsp;</span>
+        <span class="mark">{to_hex(pattern_id)}</span>
         <span class="id">rw</span>
         <span class="note">nnn</span>
         <span class="effect">eee</span>
@@ -39,9 +36,9 @@
         <div class="pattern-cell">
             <span class="mark">
                 {#if i === row_id}
-                    <span class="mark-arrow">></span>
+                    <span class="mark-arrow">&nbsp;></span>
                 {:else}
-                    <span class="mark-space">&nbsp;</span>
+                    <span class="mark-space">&nbsp;&nbsp;</span>
                 {/if}
             </span>
             <span class="id">{to_hex(i)}</span>

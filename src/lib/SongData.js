@@ -38,64 +38,64 @@ export function effect_to_string(effect) {
 export const Note = {
     None: 0,
     C2: 1,
-    C2s: 2,
+    Cs2: 2,
     D2: 3,
-    D2s: 4,
+    Ds2: 4,
     E2: 5,
     F2: 6,
-    F2s: 7,
+    Fs2: 7,
     G2: 8,
-    G2s: 9,
+    Gs2: 9,
     A2: 10,
-    A2s: 11,
+    As2: 11,
     B2: 12,
     C3: 13,
-    C3s: 14,
+    Cs3: 14,
     D3: 15,
-    D3s: 16,
+    Ds3: 16,
     E3: 17,
     F3: 18,
-    F3s: 19,
+    Fs3: 19,
     G3: 20,
-    G3s: 21,
+    Gs3: 21,
     A3: 22,
-    A3s: 23,
+    As3: 23,
     B3: 24,
     C4: 25,
-    C4s: 26,
+    Cs4: 26,
     D4: 27,
-    D4s: 28,
+    Ds4: 28,
     E4: 29,
     F4: 30,
-    F4s: 31,
+    Fs4: 31,
     G4: 32,
-    G4s: 33,
+    Gs4: 33,
     A4: 34,
-    A4s: 35,
+    As4: 35,
     B4: 36,
     C5: 37,
-    C5s: 38,
+    Cs5: 38,
     D5: 39,
-    D5s: 40,
+    Ds5: 40,
     E5: 41,
     F5: 42,
-    F5s: 43,
+    Fs5: 43,
     G5: 44,
-    G5s: 45,
+    Gs5: 45,
     A5: 46,
-    A5s: 47,
+    As5: 47,
     B5: 48,
     C6: 49,
-    C6s: 50,
+    Cs6: 50,
     D6: 51,
-    D6s: 52,
+    Ds6: 52,
     E6: 53,
     F6: 54,
-    F6s: 55,
+    Fs6: 55,
     G6: 56,
-    G6s: 57,
+    Gs6: 57,
     A6: 58,
-    A6s: 59,
+    As6: 59,
     B6: 60,
     OFF: 63,
 }
@@ -174,14 +174,16 @@ export class Record {
     }
 }
 
+export const PATTERN_SIZE = 64;
+
 export class Channel {
     /**
      * @param {Record[]} records
      */
     constructor(records) {
         this.records = records;
-        if (records.length != 64) {
-            throw new Error("Channel: Channel must have 64 records.");
+        if (records.length != PATTERN_SIZE) {
+            throw new Error("Channel: Channel must have 64 records, but has " + records.length + " records.");
         }
     }
 }
@@ -200,7 +202,7 @@ export class PatternOrder {
      * @param {number[]} pattern_order
      */
     constructor(pattern_order) {
-        this.pattern_order = pattern_order;
+        this.data = pattern_order;
     }
 }
 
@@ -226,6 +228,17 @@ export class Song {
         }
     }
 }
+
+const order_list = new PatternOrder([
+    0,
+    1,
+    0,
+    2,
+    0,
+    1,
+    0,
+    3,
+]);
 
 export let demo_song = new Song(1, [new Pattern([new Channel([
     new Record(Note.C4, new EffectRecord(Effects.Arpeggio, 4, 7)),
@@ -307,4 +320,248 @@ export let demo_song = new Song(1, [new Pattern([new Channel([
     new Record(Note.None, new EffectRecord(Effects.Vibrato, 2, 2)),
     new Record(Note.None, new EffectRecord(Effects.Vibrato, 2, 2)),
     new Record(Note.OFF),
-])])], new PatternOrder([0]), 120, 2);
+])]),
+new Pattern([new Channel([
+    new Record(Note.C5, new EffectRecord(Effects.Arpeggio, 4, 7)),
+    new Record(Note.E3),
+    new Record(Note.A2),
+    new Record(Note.E3),
+
+    new Record(Note.B4),
+    new Record(Note.E3),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 50)),
+    new Record(Note.OFF),
+
+    new Record(Note.G4),
+    new Record(Note.None, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.None, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.OFF),
+
+    new Record(Note.C5),
+    new Record(Note.None, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.None, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.OFF),
+
+    new Record(Note.C6),
+    new Record(Note.E3, new EffectRecord(Effects.SlideDown, 0x30)),
+    new Record(Note.A2),
+    new Record(Note.E3),
+
+    new Record(Note.B4),
+    new Record(Note.E3),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 50)),
+    new Record(Note.OFF),
+
+    new Record(Note.G4),
+    new Record(Note.None),
+    new Record(Note.None),
+    new Record(Note.None, new EffectRecord(Effects.Vibrato, 1, 1)),
+
+    new Record(Note.None, new EffectRecord(Effects.Vibrato, 1, 1)),
+    new Record(Note.None, new EffectRecord(Effects.Vibrato, 2, 2)),
+    new Record(Note.None, new EffectRecord(Effects.Vibrato, 2, 2)),
+    new Record(Note.OFF),
+
+    new Record(Note.C5, new EffectRecord(Effects.Arpeggio, 4, 7)),
+    new Record(Note.E3),
+    new Record(Note.A2),
+    new Record(Note.E3),
+
+    new Record(Note.B4),
+    new Record(Note.E3),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 50)),
+    new Record(Note.OFF),
+
+    new Record(Note.G4),
+    new Record(Note.None, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.None, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.OFF),
+
+    new Record(Note.D5),
+    new Record(Note.None, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.None, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.OFF),
+
+    new Record(Note.C6),
+    new Record(Note.E3, new EffectRecord(Effects.SlideDown, 0x30)),
+    new Record(Note.A2),
+    new Record(Note.E3),
+
+    new Record(Note.B4),
+    new Record(Note.E3),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 50)),
+    new Record(Note.OFF),
+
+    new Record(Note.G4),
+    new Record(Note.None),
+    new Record(Note.None),
+    new Record(Note.None, new EffectRecord(Effects.Vibrato, 1, 1)),
+
+    new Record(Note.None, new EffectRecord(Effects.Vibrato, 1, 1)),
+    new Record(Note.None, new EffectRecord(Effects.Vibrato, 2, 2)),
+    new Record(Note.None, new EffectRecord(Effects.Vibrato, 2, 2)),
+    new Record(Note.OFF),
+])]),
+new Pattern([new Channel([
+    new Record(Note.C5, new EffectRecord(Effects.Arpeggio, 4, 7)),
+    new Record(Note.E3),
+    new Record(Note.A2),
+    new Record(Note.E3),
+
+    new Record(Note.C5),
+    new Record(Note.A4),
+    new Record(Note.C5),
+    new Record(Note.A4),
+
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.A4, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.OFF),
+
+    new Record(Note.C5),
+    new Record(Note.A4),
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.OFF),
+
+    new Record(Note.D5),
+    new Record(Note.E3, new EffectRecord(Effects.SlideDown, 0x30)),
+    new Record(Note.A2),
+    new Record(Note.E3),
+
+    new Record(Note.OFF),
+    new Record(Note.E3),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.OFF),
+
+    new Record(Note.D5),
+    new Record(Note.B4),
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.OFF),
+
+    new Record(Note.D5, new EffectRecord(Effects.Arpeggio, 4, 7)),
+    new Record(Note.E3),
+    new Record(Note.A2),
+    new Record(Note.E3),
+
+    new Record(Note.E5),
+    new Record(Note.C5),
+    new Record(Note.E5),
+    new Record(Note.C5),
+
+    new Record(Note.E5, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.E5, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.OFF),
+
+    new Record(Note.E5),
+    new Record(Note.C5),
+    new Record(Note.E5, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.OFF),
+
+    new Record(Note.D5),
+    new Record(Note.E3, new EffectRecord(Effects.SlideDown, 0x30)),
+    new Record(Note.A2),
+    new Record(Note.E3),
+
+    new Record(Note.OFF),
+    new Record(Note.E3),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.OFF),
+
+    new Record(Note.D5),
+    new Record(Note.B4),
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 55)),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.OFF),
+])]),
+new Pattern([new Channel([
+    new Record(Note.Ds5, new EffectRecord(Effects.Arpeggio, 4, 6)),
+    new Record(Note.C5),
+    new Record(Note.Ds5),
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.Ds5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.Ds5, new EffectRecord(Effects.PWM, 30)),
+    new Record(Note.OFF),
+
+    new Record(Note.D5),
+    new Record(Note.B4),
+    new Record(Note.D5),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 30)),
+    new Record(Note.OFF),
+
+    new Record(Note.Cs5, new EffectRecord(Effects.Arpeggio, 4, 6)),
+    new Record(Note.As4),
+    new Record(Note.Cs5),
+    new Record(Note.As4, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.Cs5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.As4, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.Cs5, new EffectRecord(Effects.PWM, 30)),
+    new Record(Note.OFF),
+
+    new Record(Note.C5),
+    new Record(Note.A4),
+    new Record(Note.C5),
+    new Record(Note.A4, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.A4, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 30)),
+    new Record(Note.OFF),
+
+    new Record(Note.B4, new EffectRecord(Effects.Arpeggio, 4, 6)),
+    new Record(Note.Gs4),
+    new Record(Note.B4),
+    new Record(Note.Gs4, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.Gs4, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 30)),
+    new Record(Note.OFF),
+
+    new Record(Note.C5),
+    new Record(Note.A4),
+    new Record(Note.C5),
+    new Record(Note.A4, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.A4, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.C5, new EffectRecord(Effects.PWM, 30)),
+    new Record(Note.OFF),
+
+    new Record(Note.Cs5, new EffectRecord(Effects.Arpeggio, 4, 6)),
+    new Record(Note.As4),
+    new Record(Note.Cs5),
+    new Record(Note.As4, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.Cs5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.As4, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.Cs5, new EffectRecord(Effects.PWM, 30)),
+    new Record(Note.OFF),
+
+    new Record(Note.D5),
+    new Record(Note.B4),
+    new Record(Note.D5),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 55)),
+
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 45)),
+    new Record(Note.B4, new EffectRecord(Effects.PWM, 35)),
+    new Record(Note.D5, new EffectRecord(Effects.PWM, 30)),
+    new Record(Note.OFF),
+])]),
+], order_list, 60, 2);
