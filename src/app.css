@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'HaxrCorp';
-  src: url('assets/haxrcorp-4089.ttf') format('truetype');
+  src: url('./assets/haxrcorp-4089.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'ProFont';
-  src: url('assets/ProFont.ttf') format('truetype');
+  src: url('./assets/ProFont.ttf') format('truetype');
 }
 
 :root {
