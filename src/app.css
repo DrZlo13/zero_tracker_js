@@ -1,5 +1,16 @@
+@font-face {
+  font-family: 'HaxrCorp';
+  src: url('assets/haxrcorp-4089.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'ProFont';
+  src: url('assets/ProFont.ttf') format('truetype');
+}
+
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Inter, Avenir, Helvetica, Arial, sans-serif; */
+  font-family: 'ProFont', Consolas, monospace;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
