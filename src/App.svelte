@@ -3,6 +3,7 @@
   import PatternView from "./lib/PatternView.svelte";
   import { demo_song } from "./lib/SongData.js";
   import { Osc, Track, SongPlayer } from "./lib/SongPlayer.js";
+  import Version from "./lib/Version.svelte";
 
   let song = demo_song;
   let row_id = 0;
@@ -85,3 +86,5 @@
   <button on:click={play}>{!playing ? "Play" : "Stop"}</button>
   <PatternView {song} {order_id} {row_id} />
 </main>
+
+<Version />
