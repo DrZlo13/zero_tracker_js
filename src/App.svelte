@@ -83,8 +83,7 @@
 </script>
 
 <main>
-  <button on:click={play}>{!playing ? "Play" : "Stop"}</button>
-  <PatternView {song} {order_id} {row_id} />
+  <PatternView {song} {order_id} {row_id} {player} on_play={play} />
 </main>
 
 <Version />
