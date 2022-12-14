@@ -5,14 +5,15 @@
   import { Osc, Track, SongPlayer } from "./lib/SongPlayer.js";
 
   let song = demo_song;
-  let pattern_id = 0;
   let row_id = 0;
+  let order_id = 0;
 
   /** @type {Tone.PulseOscillator} */
   let osc;
+  let volume;
 
   let loop;
-  let start = false;
+  let playing = false;
 
   let frequency = 440;
   let width = 1.0;
@@ -34,17 +35,23 @@
     }
   );
 
+  const stop_player = () => {
+    playing = false;
+    clearInterval(loop);
+    osc.stop();
+    row_id = 0;
+  };
+
   const track = new Track(
     (/** @type {number} */ row) => {
       row_id = row;
     },
-    (/** @type {number} */ pattern) => {
-      if (pattern == -1) {
-        pattern_id = 0;
-        row_id = 0;
-        start = false;
-      } else {
-        pattern_id = pattern;
+    (/** @type {number} */ order) => {
+      order_id = order;
+    },
+    (/** @type {boolean}*/ state) => {
+      if (!state) {
+        stop_player();
       }
     }
   );
@@ -57,23 +64,23 @@
   };
 
   const play = () => {
-    if (!start) {
-      start = true;
-
-      osc = new Tone.PulseOscillator(frequency, width).toDestination();
+    if (!playing) {
+      playing = true;
+      volume = new Tone.Volume(-30).toDestination();
+      osc = new Tone.PulseOscillator(frequency, width).connect(volume).start();
+      player.set_order(order_id);
+      player.set_row(row_id);
+      player.set_playing(playing);
       loop = setInterval(() => {
         interrupt_body();
       }, 1000 / song.ticks_per_second);
     } else {
-      start = false;
-      clearInterval(loop);
-      osc.stop();
-      row_id = 0;
+      stop_player();
     }
   };
 </script>
 
 <main>
-  <button on:click={play}>{!start ? "Play" : "Stop"}</button>
-  <PatternView {song} {pattern_id} {row_id} />
+  <button on:click={play}>{!playing ? "Play" : "Stop"}</button>
+  <PatternView {song} {order_id} {row_id} />
 </main>

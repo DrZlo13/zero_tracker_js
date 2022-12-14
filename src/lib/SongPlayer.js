@@ -105,11 +105,13 @@ export class Osc {
 export class Track {
     /**
      * @param {function} set_row
-     * @param {function} set_pattern
+     * @param {function} set_order_id
+     * @param {function} set_state
      */
-    constructor(set_row, set_pattern) {
+    constructor(set_row, set_order_id, set_state) {
         this.set_row = set_row;
-        this.set_pattern = set_pattern;
+        this.set_order_id = set_order_id;
+        this.set_state = set_state;
     }
 }
 
@@ -159,8 +161,17 @@ export class SongPlayer {
         this.state = song_state_start(song);
     }
 
+    send_order_id(order_id) {
+        if (order_id >= this.song.pattern_order.data.length) {
+            order_id = 0;
+        }
+        this.track.set_order_id(order_id);
+    }
+
     advance_order_and_get_next_pattern_index() {
         this.state.order_list_index++;
+        this.send_order_id(this.state.order_list_index);
+
         if (this.state.order_list_index >= this.song.pattern_order.data.length) {
             return -1;
         } else {
@@ -174,9 +185,19 @@ export class SongPlayer {
     }
 
     set_pattern(pattern_index) {
-        this.track.set_pattern(pattern_index);
         this.state.pattern_index = pattern_index;
         this.set_row(0);
+    }
+
+    set_order(order_list_index) {
+        this.state.order_list_index = order_list_index;
+        this.send_order_id(order_list_index);
+        this.set_pattern(this.song.pattern_order.data[order_list_index]);
+    }
+
+    set_playing(playing) {
+        this.state.playing = playing;
+        this.track.set_state(playing);
     }
 
     row() {
@@ -194,11 +215,13 @@ export class SongPlayer {
         let channel_state = this.channels[channel_index];
 
         if (!state.playing) {
+            this.track.set_state(state.playing);
             osc.stop();
         }
 
         if (state.pattern_index < 0) {
             state.playing = false;
+            this.track.set_state(state.playing);
             osc.stop();
             return;
         }
@@ -226,6 +249,7 @@ export class SongPlayer {
                     state.order_list_index = this.song.pattern_order.data.length - 1;
                 }
 
+                this.send_order_id(state.order_list_index);
                 let next_pattern_index = this.song.pattern_order.data[state.order_list_index];
                 this.set_pattern(next_pattern_index);
                 invalidate_row = true;
@@ -233,6 +257,7 @@ export class SongPlayer {
 
             // tracker state can be affected by effects
             if (!state.playing) {
+                this.track.set_state(state.playing);
                 osc.stop();
                 return;
             }
