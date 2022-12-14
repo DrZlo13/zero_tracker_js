@@ -1,2 +1,1 @@
-# Zero Tracker web application
-[...]
+[Zero Tracker.js](https://drzlo13.github.io/zero_tracker_js/)
