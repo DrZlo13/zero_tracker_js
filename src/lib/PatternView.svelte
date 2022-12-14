@@ -27,6 +27,7 @@
 
 <div class="view">
     <div class="pattern">
+        <div class="header">Pattern</div>
         <div class="pattern-row">
             <span class="mark">{to_hex(pattern_id)}</span>
             <span class="id">rw</span>
@@ -43,7 +44,9 @@
                         <span class="mark-space">&nbsp;&nbsp;</span>
                     {/if}
                 </span>
-                <span class="id">{to_hex(i)}</span>
+                <span class="id {i % 4 == 0 ? 'quad' : ''}">
+                    {to_hex(i)}
+                </span>
                 <span class="note">{note_to_string(row.note_record)}</span>
                 {#if effect_record_is_empty(row.effect_record)}
                     <span class="fx">---</span>
@@ -61,8 +64,9 @@
     </div>
 
     <div class="order">
+        <div class="header">Order</div>
         <div class="pattern-row">
-            <span class="mark">{to_hex(pattern_id)}</span>
+            <span class="mark">{to_hex(order_id)}</span>
             <span class="id">nn</span>
         </div>
         {#each song.pattern_order.data as pattern_id, i}
@@ -97,5 +101,9 @@
         width: 100%;
         height: 100%;
         justify-content: space-between;
+    }
+
+    .quad {
+        color: #ff9200;
     }
 </style>

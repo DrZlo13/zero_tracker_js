@@ -40,6 +40,7 @@
     clearInterval(loop);
     osc.stop();
     row_id = 0;
+    order_id = 0;
   };
 
   const track = new Track(
